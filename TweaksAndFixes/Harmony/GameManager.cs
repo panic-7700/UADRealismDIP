@@ -257,6 +257,34 @@ namespace TweaksAndFixes
             //     lastState = __instance.__1__state;
             // }
 
+            // Skip generating previews. They don't generate right anyway...
+            if (__instance.__1__state == 17)
+            {
+                //foreach (var ship in CampaignController.Instance.CampaignData.GetShips)
+                //{
+                //    if (ship.player != PlayerController.Instance) continue;
+                //
+                //    if (!ship.isDesign && !ship.isRefitDesign) continue;
+                //
+                //    Melon<TweaksAndFixes>.Logger.Msg($"Loading parts for design {ship.Name(false, false)}");
+                //
+                //    // ship.hull.LoadModel(ship, false);
+                //
+                //    foreach (var part in ship.parts)
+                //    {
+                //        if (part.data.model == "(custom)") continue;
+                //        Melon<TweaksAndFixes>.Logger.Msg($"  Loading {part.data.model}");
+                //        Util.ResourcesLoad<GameObject>(part.data.model);
+                //    }
+                //
+                //    Melon<TweaksAndFixes>.Logger.Msg($"  Generating preview...");
+                //
+                //    G.ui.GetShipPreviewTex(ship);
+                //}
+
+                __instance.__1__state++;
+            }
+
             if (__instance.__1__state == 9)
             {
                 // Melon<TweaksAndFixes>.Logger.Msg($"Checking for null design IDs...");
