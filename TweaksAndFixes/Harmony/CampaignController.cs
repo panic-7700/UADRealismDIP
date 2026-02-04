@@ -143,7 +143,7 @@ namespace TweaksAndFixes
                     if (vessels[i].vesselType == VesselEntity.VesselType.Submarine)
                         continue;
 
-                    Melon<TweaksAndFixes>.Logger.Msg($"Removing {vessels[i].status} ship '{vessels[i].vesselName}'");
+                    // Melon<TweaksAndFixes>.Logger.Msg($"Removing {vessels[i].status} ship '{vessels[i].vesselName}'");
 
                     bool hasDesign = false;
 
@@ -151,7 +151,7 @@ namespace TweaksAndFixes
                     {
                         if (((Ship)vessels[j]).design == vessels[i])
                         {
-                            Melon<TweaksAndFixes>.Logger.Msg($"    Erased design has {vessels[j].status} ship '{vessels[j].vesselName}'");
+                            // Melon<TweaksAndFixes>.Logger.Msg($"    Erased design has {vessels[j].status} ship '{vessels[j].vesselName}'");
                             hasDesign = true;
                             break;
                         }
