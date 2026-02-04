@@ -71,6 +71,11 @@ namespace TweaksAndFixes
 
                     if (float.TryParse(posData[0], System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out x) && float.TryParse(posData[1], System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out y) && float.TryParse(posData[2], System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out z))
                     {
+                        if (x != 0f && Mathf.Abs(x) < 0.1f)
+                        {
+                            Melon<TweaksAndFixes>.Logger.Error($"MountOverrideData: [{parent + " | " + index}] Potentially uncentered mount `{position}`. Consider setting the x value to 0 in the mounts.csv file.");
+                        }
+
                         positionParsed = new Vector3(x, y, z);
                     }
                     else
