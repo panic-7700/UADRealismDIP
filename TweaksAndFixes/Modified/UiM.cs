@@ -2456,12 +2456,8 @@ namespace TweaksAndFixes
 
         private static bool isRmbDrag = false;
         private static bool isMmbDrag = false;
-        private static bool ignoreNextCameraMove = false;
-
-        public static void IgnoreNextCamereMove()
-        {
-            ignoreNextCameraMove = true;
-        }
+        private static bool ignoreFirstRmbFrame = true;
+        private static bool ignoreFirstMmbFrame = true;
 
         private static void UpdateOrbitCamera(Cam _this)
         {
@@ -2507,21 +2503,22 @@ namespace TweaksAndFixes
                 );
 
                 _this.distanceDesired = zoomTo;
-                // Melon<TweaksAndFixes>.Logger.Msg($"      {_this.distanceDesired} && {_this.distance}");
             }
 
             // Mouse camera rotation
             if (allowCameraControl && (GameManager.CanHandleMouseInput() || isRmbDrag) && Input.GetMouseButton(1))
             {
-                if (ignoreNextCameraMove)
+                // Always skip the first frame update for camera drag.
+                // Should prevent the camera jerking from happening anymore.
+                if (ignoreFirstRmbFrame)
                 {
                     _this.prevMousePos = Input.mousePosition;
-                    ignoreNextCameraMove = false;
+                    ignoreFirstRmbFrame = false;
                 }
 
                 // Melon<TweaksAndFixes>.Logger.Msg($"{Input.mousePosition.ToString("F0"),-16} -> {_this.prevMousePos.ToString("F0"),-16} = {(Input.mousePosition - _this.prevMousePos).ToString("F0"),-16} : dt = {dt}");
 
-                _this.rotationX +=
+                _this.rotationX -=
                     (_this.allowRotateX ?
                         (Input.mousePosition.y - _this.prevMousePos.y) * dt * _this.rotationSensitivityX : 0);
 
@@ -2537,11 +2534,20 @@ namespace TweaksAndFixes
             }
             else
             {
+                ignoreFirstRmbFrame = true;
                 isRmbDrag = false;
             }
 
             if (allowCameraControl && (GameManager.CanHandleMouseInput() || isMmbDrag) && Input.GetMouseButton(2))
             {
+                // Always skip the first frame update for camera drag.
+                // Should prevent the camera jerking from happening anymore.
+                if (ignoreFirstMmbFrame)
+                {
+                    _this.prevMousePos = Input.mousePosition;
+                    ignoreFirstMmbFrame = false;
+                }
+
                 deltaPan += -Vector3.forward * (Input.mousePosition.y - _this.prevMousePos.y) / Screen.height * _this.panSensitivityX +
                             -Vector3.right * (Input.mousePosition.x - _this.prevMousePos.x) / Screen.width * _this.panSensitivityY;
 
@@ -2549,6 +2555,7 @@ namespace TweaksAndFixes
             }
             else
             {
+                ignoreFirstMmbFrame = true;
                 isMmbDrag = false;
             }
 
@@ -2612,7 +2619,7 @@ namespace TweaksAndFixes
                 _this.inputScroll = deltaPan != Vector3.zero;
 
                 // Parse Pan input
-                float radX = _this.rotationX / 180f * Mathf.PI;
+                float radX = (_this.limitMaxRotationX - _this.rotationX + _this.limitMinRotationX) / 180f * Mathf.PI;
                 float radY = (_this.rotationY - 90f) / 180f * Mathf.PI;
 
                 float panMult = _this.scrollSensitivity *
@@ -2648,11 +2655,21 @@ namespace TweaksAndFixes
                     _this.distance * _this.distanceMod * Mathf.Cos(-radX),
                     _this.distance * _this.distanceMod * Mathf.Sin(-radX) * Mathf.Sin(-radY)
                 );
+                Vector3 focusOffset = new Vector3();
+                Vector3 verticalOffset = new Vector3();
+
+                // Battle camera has different camera positioning
+                if (GameManager.IsBattle)
+                {
+                    // Several hours of my life were spent finding these ratios...
+                    focusOffset = new Vector3(0, _this.distance / 6f, 0);
+                    verticalOffset = new Vector3(0, _this.distance / 30f, 0);
+                }
 
                 _this.transform.position =
                     _this.plane.transform.position + _this.plane.transform.TransformDirection(_this.plane.center) +
-                    _this.lookingAt + offset;
-                _this.transform.forward = -offset;
+                    _this.lookingAt + offset + verticalOffset;
+                _this.transform.forward = -offset + focusOffset;
 
                 // Update tracking variables
                 _this.cameraMovement = _this.transform.position - originalPosition;

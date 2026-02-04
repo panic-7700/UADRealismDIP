@@ -83,24 +83,6 @@ namespace TweaksAndFixes
 
 
 
-        // AllowCameraControl
-        // 
-        // [HarmonyPatch(nameof(Ui.AllowCameraControl))]
-        // [HarmonyPrefix]
-        // internal static bool Prefix_AllowCameraControl(Ui __instance, ref bool __result)
-        // {
-        //     if (!UiM.showPopups)
-        //     {
-        //         __result = true;
-        //         return false;
-        //     }
-        // 
-        //     return true;
-        // }
-
-
-
-
 
         // ########## CHECK FOR WHITE PEACE ########## //
 
@@ -1925,16 +1907,6 @@ namespace TweaksAndFixes
         }
 
 
-        // ClearPlacingPart
-
-        [HarmonyPatch(nameof(Ui.ClearPlacingPart))]
-        [HarmonyPostfix]
-        internal static void Prefix_ClearPlacingPart(Ui __instance)
-        {
-            UiM.IgnoreNextCamereMove();
-        }
-
-
         // ########## SHIP PREVIEWS ########## //
 
         [HarmonyPatch(nameof(Ui.GetShipPreviewTexGeneric))]
@@ -2521,10 +2493,6 @@ namespace TweaksAndFixes
         [HarmonyPrefix]
         internal static bool Prefix_Update(Cam __instance)
         {
-            // Only works for the map, no clue why the other two use a different system
-            __instance.CampaignZoomSpeed = 30;
-            __instance.BattleZoomSpeed = 1;
-
             __instance.rotationSensitivityKeyMod = 10;
             __instance.panSensitivityX = 50;
             __instance.panSensitivityY = 50;
