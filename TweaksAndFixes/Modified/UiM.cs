@@ -1802,7 +1802,9 @@ namespace TweaksAndFixes
 
                 if (GameManager.IsWorld)
                 {
-                    WorldCampaign.instance.worldEx.GetChild("2DMap").GetChild("Map").SetActive(val);
+                    GameObject mapImage = ModUtils.GetChildAtPath("2DMap/Map", WorldCampaign.instance.worldEx);
+                    var mapRenderer = mapImage.GetComponent<MeshRenderer>();
+                    mapRenderer.enabled = UiM.TAF_Settings.settings.showMapImage;
                 }
             }));
 

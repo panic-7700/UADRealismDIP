@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using UnityEngine;
 using Il2Cpp;
+using UnityEngine.UI;
 
 namespace TweaksAndFixes
 {
@@ -37,7 +38,9 @@ namespace TweaksAndFixes
                 HasDestroyedSubmarineButton = true;
             }
 
-            WorldCampaign.instance.worldEx.GetChild("2DMap").GetChild("Map").SetActive(UiM.TAF_Settings.settings.showMapImage);
+            GameObject mapImage = ModUtils.GetChildAtPath("2DMap/Map", WorldCampaign.instance.worldEx);
+            var mapRenderer = mapImage.GetComponent<MeshRenderer>();
+            mapRenderer.enabled = UiM.TAF_Settings.settings.showMapImage;
         }
     }
 }
