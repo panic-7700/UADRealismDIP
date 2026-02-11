@@ -895,7 +895,8 @@ namespace TweaksAndFixes
 
             foreach (Ship design in new Il2CppSystem.Collections.Generic.List<Ship>(player.designs))
             {
-                AppendSubTitle(design.Name(false, false, false, false, true));
+                AppendSubTitle(design.Name(false, false, false, false, true) + (design.IsSharedDesign ? " (Shared Design)" : ""));
+                AppendStringEntry("ID", $"{design.id}");
                 AppendStringEntry("Type", $"{design.shipType.nameFull} ({design.shipType.name.ToUpper()})");
                 AppendStringEntry("Design Year", $"{design.dateCreated.AsDate().Month}. {design.dateCreated.AsDate().Year}");
                 AppendNumericEntry("Cost", design.Cost());
