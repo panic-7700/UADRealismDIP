@@ -572,6 +572,8 @@ namespace TweaksAndFixes
 
             CreateHidePopupsButton();
 
+            ApplyMainMenuModifications();
+
             ApplySettingsMenuModifications();
 
             ApplyCampaignWindowModifications();
@@ -723,6 +725,15 @@ namespace TweaksAndFixes
 
             AddConfirmPopupToButton(ui.FleetWindow.Delete, "$TAF_Ui_FleetWindow_Confirm_Action_Delete");
             AddConfirmPopupToButton(ui.FleetWindow.Scrap, "$TAF_Ui_FleetWindow_Confirm_Action_Scrap");
+        }
+
+        // ========== MAIN MENU ========== //
+
+        public static void ApplyMainMenuModifications()
+        {
+            G.ui.NewGameWindow.ChangeFleetCreation(1);
+            G.ui.NewGameWindow.ChangeDesignUsage(1);
+            G.ui.NewGameWindow.ChangeSharedDesigns(1);
         }
 
         // ========== CAMPAIGN ========== //
