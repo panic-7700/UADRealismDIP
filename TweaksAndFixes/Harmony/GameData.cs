@@ -47,8 +47,12 @@ namespace TweaksAndFixes
             // TODO: Ew! Replace this trash!!!
             foreach (var ev in G.GameData.events)
             {
-                ev.Value.param.Replace("low_money", "");
-                if (ev.Value.paramx.ContainsKey("low_money")) ev.Value.paramx.Remove("low_money");
+                ev.Value.param = ev.Value.param.Replace("low_money", "TAF_low_money");
+                if (ev.Value.paramx.ContainsKey("low_money"))
+                {
+                    ev.Value.paramx.Remove("low_money");
+                    ev.Value.paramx.Add("TAF_low_money", new());
+                }
             }
         }
 
