@@ -216,10 +216,24 @@ namespace TweaksAndFixes
             List<float> techCoverage = new List<float>();
             int maxYearUp = Mathf.RoundToInt(Config.Param("taf_shareddesign_maxYearsIntoFuture", 10f));
             int maxYearDpwnForSplit = Mathf.RoundToInt(Config.Param("taf_shareddesign_yearsInPastForSplit", 5f));
+
+            List<Il2CppSystem.Guid> ids = new();
+
+            foreach (var design in new Il2CppSystem.Collections.Generic.List<Ship>(player.designs))
+            {
+                if (!design.IsSharedDesign)
+                    continue;
+
+                ids.Add(design.id);
+            }
+
             foreach (var tuple in designs)
             {
                 var store = tuple.Item1;
                 if (store.shipType != shipType.name)
+                    continue;
+
+                if (ids.Contains(store.id))
                     continue;
 
                 if (store.YearCreated > year + maxYearUp)
