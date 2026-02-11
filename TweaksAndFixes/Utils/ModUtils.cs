@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using MelonLoader;
-using HarmonyLib;
+﻿using MelonLoader;
 using UnityEngine;
 using Il2Cpp;
 using System.Runtime.CompilerServices;
-using System.Reflection;
 using System.Globalization;
 using UnityEngine.UI;
 using Il2CppTMPro;
 using System.Text;
-using System.Reflection.Metadata.Ecma335;
 using System.IO.Compression;
-using System.Data;
-using static Il2CppSystem.Linq.Expressions.Interpreter.CastInstruction.CastInstructionNoT;
 
 #pragma warning disable CS8601
 #pragma warning disable CS8602
