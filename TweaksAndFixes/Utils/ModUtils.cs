@@ -260,9 +260,29 @@ namespace TweaksAndFixes
             );
         }
 
+        public static bool TryParse(string str, out int res)
+        {
+            return int.TryParse(str, System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out res);
+        }
+
+        public static bool TryParse(string str, out float res)
+        {
+            return float.TryParse(str, System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out res);
+        }
+
+        public static bool TryParse(string str, out double res)
+        {
+            return double.TryParse(str, System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out res);
+        }
+
         public static int toInt(float x)
         {
             return (int)(x + 0.05f);
+        }
+
+        public static int toInt(double x)
+        {
+            return (int)(x + 0.05);
         }
 
         public static bool NearlyEqual(float a, float b)
