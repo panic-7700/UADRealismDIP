@@ -1557,7 +1557,7 @@ namespace TweaksAndFixes
             {
                 int _ = 0;
 
-                if (value.Length > 0 && !int.TryParse("" + value[^1], out _))
+                if (value.Length > 0 && !ModUtils.TryParse("" + value[^1], out _))
                 {
                     // Melon<TweaksAndFixes>.Logger.Msg($"  Invalid: `{value[^1]}`");
                     InputChooseYearEditField.text = InputChooseYearEditField.text.Substring(0, InputChooseYearEditField.text.Length - 1);
@@ -1573,7 +1573,7 @@ namespace TweaksAndFixes
 
                 int parsedYear = 0;
 
-                if (value.Length == 0 || !int.TryParse(value, out parsedYear) || parsedYear == G.ui.sharedDesignYear || parsedYear < Config.StartingYear || parsedYear > Config.Param("taf_shared_designer_max_year", 1960))
+                if (value.Length == 0 || !ModUtils.TryParse(value, out parsedYear) || parsedYear == G.ui.sharedDesignYear || parsedYear < Config.StartingYear || parsedYear > Config.Param("taf_shared_designer_max_year", 1960))
                 {
                     // Melon<TweaksAndFixes>.Logger.Msg($"  Parsed: `{parsedYear}`");
                     InputChooseYearEditField.text = G.ui.sharedDesignYear.ToString();
