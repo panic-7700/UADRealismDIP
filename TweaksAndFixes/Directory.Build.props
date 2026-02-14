@@ -17,7 +17,7 @@
     <Target Name="ValidateGamePath" BeforeTargets="CoreCompile">
         <Message Text="Target UAD_PATH = '$(UAD_PATH)'" Importance="High" />
         <Error Condition="'$(UAD_PATH)' == '' OR !Exists('$(UAD_PATH)')" Text="UAD_PATH '$(UAD_PATH)' does not exist. Set the UAD_PATH environment variable to the Ultimate Admiral Dreadnoughts install folder." />
-        <Error Condition="!Exists('$(UAD_PATH)/MelonLoader')" Text="Please install Melon Loader, see installation guide: https://github.com/DukeDagor/UADRealismDIP?tab=readme-ov-file#installation" />
+        <Error Condition="!Exists('$(UAD_PATH)/MelonLoader')" Text="Please install MelonLoader, see installation guide: https://github.com/DukeDagor/UADRealismDIP?tab=readme-ov-file#installation" />
         <Warning Condition="!Exists('$(UAD_PATH)/Mods/UnityExplorer.ML.IL2CPP.dll') OR !Exists('$(UAD_PATH)/UserLibs/UniverseLib.IL2CPP.dll')" Text="Recommend installing sinai UnityExplorer for MelonLoader, IL2CPP Release ML 0.6, available at: https://github.com/sinai-dev/UnityExplorer#melonloader" />
     </Target>
 </Project>
