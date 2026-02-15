@@ -1,0 +1,26 @@
+<Project>
+    <PropertyGroup>
+        <UAD_Relative>steamapps/common/Ultimate Admiral Dreadnoughts/</UAD_Relative>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+        <UAD_PATH Condition="'$(UAD_PATH)' == '' AND Exists('C:/Program Files (x86)/Steam/$(UAD_Relative)')">C:/Program Files (x86)/Steam/$(UAD_Relative)</UAD_PATH>
+        <UAD_PATH Condition="'$(UAD_PATH)' == '' AND Exists('D:/Games/Steam/$(UAD_Relative)')">D:/Games/Steam/$(UAD_Relative)</UAD_PATH>
+        <UAD_PATH Condition="'$(UAD_PATH)' == '' AND Exists('D:/SteamLibrary/$(UAD_Relative)')">D:/SteamLibrary/$(UAD_Relative)</UAD_PATH>
+        <UAD_PATH Condition="'$(UAD_PATH)' == '' AND Exists('G:/Games/Steam/$(UAD_Relative)')">G:/Games/Steam/$(UAD_Relative)</UAD_PATH>
+        <UAD_PATH Condition="'$(UAD_PATH)' == '' AND Exists('G:/SteamLibrary/$(UAD_Relative)')">G:/SteamLibrary/$(UAD_Relative)</UAD_PATH>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
+        <UAD_PATH Condition="'$(UAD_PATH)' == '' AND Exists('$([System.Environment]::GetFolderPath(SpecialFolder.UserProfile))/Library/Application Support/Steam/$(UAD_Relative)')">$([System.Environment]::GetFolderPath(SpecialFolder.UserProfile))/Library/Application Support/Steam/$(UAD_Relative)</UAD_PATH>
+        <UAD_PATH Condition="'$(UAD_PATH)' == '' AND Exists('$([System.Environment]::GetFolderPath(SpecialFolder.UserProfile))/.steam/steam/$(UAD_Relative)')">$([System.Environment]::GetFolderPath(SpecialFolder.UserProfile))/.steam/steam/$(UAD_Relative)</UAD_PATH>
+        <UAD_PATH Condition="'$(UAD_PATH)' == '' AND Exists('$([System.Environment]::GetFolderPath(SpecialFolder.UserProfile))/.local/share/Steam/$(UAD_Relative)')">$([System.Environment]::GetFolderPath(SpecialFolder.UserProfile))/.local/share/Steam/$(UAD_Relative)</UAD_PATH>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(UAD_PATH)' != '' AND !$(UAD_PATH.EndsWith('/')) AND !$(UAD_PATH.EndsWith('\')) ">
+        <UAD_PATH>$(UAD_PATH)/</UAD_PATH>
+    </PropertyGroup>
+    <Target Name="ValidateGamePath" BeforeTargets="CoreCompile">
+        <Message Text="Target UAD_PATH = '$(UAD_PATH)'" Importance="High" />
+        <Error Condition="'$(UAD_PATH)' == '' OR !Exists('$(UAD_PATH)')" Text="UAD_PATH '$(UAD_PATH)' does not exist. Set the UAD_PATH environment variable to the Ultimate Admiral Dreadnoughts install folder." />
+        <Error Condition="!Exists('$(UAD_PATH)/MelonLoader')" Text="Please install MelonLoader, see installation guide: https://github.com/DukeDagor/UADRealismDIP?tab=readme-ov-file#installation" />
+        <Warning Condition="!Exists('$(UAD_PATH)/Mods/UnityExplorer.ML.IL2CPP.dll') OR !Exists('$(UAD_PATH)/UserLibs/UniverseLib.IL2CPP.dll')" Text="Recommend installing sinai UnityExplorer for MelonLoader, IL2CPP Release ML 0.6, available at: https://github.com/sinai-dev/UnityExplorer#melonloader" />
+    </Target>
+</Project>
