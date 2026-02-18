@@ -1118,7 +1118,7 @@ namespace TweaksAndFixes
                     Stack<Tuple<GameObject, int>> stack = new Stack<Tuple<GameObject, int>>();
 
 
-                    GameObject model = Patch_Ship.LastCreatedShip.gameObject.GetChildren()[0].GetChildren()[0].GetChildren()[0];
+                    GameObject model = Patch_Ship.LastCreatedShip.hull.model.gameObject;
 
                     foreach (GameObject child in model.GetChildren())
                     {
@@ -1358,7 +1358,7 @@ namespace TweaksAndFixes
                     continue;
                 }
 
-                if (pair.Key.parentPart == testPart || pair.Key.gameObject.GetParent() == testPart.gameObject.GetChildren()[0])
+                if (pair.Key.parentPart == testPart || pair.Key.gameObject.GetParent() == testPart.model.gameObject)
                 {
                     // Melon<TweaksAndFixes>.Logger.Msg($"  Found Child: {pair.Value.name}");
                     children.Add(pair.Value);
@@ -1478,13 +1478,10 @@ namespace TweaksAndFixes
 
                 Part hull = Patch_Ship.LastCreatedShip.hull;
 
-                if (hull != null &&
-                    hull.gameObject.GetChildren().Count > 0 &&
-                    hull.gameObject.GetChildren()[0].GetChildren().Count > 0 &&
-                    hull.gameObject.GetChildren()[0].GetChildren()[0].GetChildren().Count > 0)
-                {
-                    var sections = Patch_Ship.LastCreatedShip.hull.gameObject.GetChildren()[0].GetChildren()[0].GetChild("Sections").GetChildren();
+                var sections = hull.model.gameObject.GetChild("Visual").GetChild("Sections").GetChildren();
 
+                if (sections.Count > 0)
+                {
                     foreach (var section in sections)
                     {
                         if (section.GetChild("TAF_ALLOW_ALL_MOUNTS", true) != null) continue;
@@ -1529,13 +1526,10 @@ namespace TweaksAndFixes
 
                 Part hull = Patch_Ship.LastCreatedShip.hull;
 
-                if (hull != null &&
-                    hull.gameObject.GetChildren().Count > 0 &&
-                    hull.gameObject.GetChildren()[0].GetChildren().Count > 0 &&
-                    hull.gameObject.GetChildren()[0].GetChildren()[0].GetChildren().Count > 0)
-                {
-                    var sections = Patch_Ship.LastCreatedShip.hull.gameObject.GetChildren()[0].GetChildren()[0].GetChild("Sections").GetChildren();
+                var sections = hull.model.gameObject.GetChild("Visual").GetChild("Sections").GetChildren();
 
+                if (sections.Count > 0)
+                {
                     foreach (var section in sections)
                     {
                         if (section.GetChild("TAF_ALLOW_DEFAULT_MOUNTS", true) != null) continue;

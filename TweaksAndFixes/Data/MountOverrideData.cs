@@ -314,15 +314,13 @@ namespace TweaksAndFixes
 
             stack.Push(model);
 
-            string partName = part.gameObject.GetChildren()[0].name;
-
-            if (partName == "Effects") partName = part.gameObject.GetChildren()[1].name;
+            string partName = part.model.name;
 
             if (relitive) partName = partName.Replace("(Clone)", "");
 
             if (!BaseGamePartModelData._Data.ContainsKey(partName))
             {
-                // Melon<TweaksAndFixes>.Logger.Msg($"Error! Key for {partName} not found! Failed to override {part.Name()}!");
+                Melon<TweaksAndFixes>.Logger.Msg($"Error! Key for {partName} not found! Failed to override {part.Name()}!");
                 // Melon<TweaksAndFixes>.Logger.Msg($"{ModUtils.DumpHierarchy(part.gameObject)}");
                 return;
             }
@@ -517,7 +515,9 @@ namespace TweaksAndFixes
 
             if (part == null) return;
 
-            if (GameManager.Instance.CurrentState == GameManager.GameState.Battle || Patch_GameManager.CurrentSubGameState == Patch_GameManager.SubGameState.LoadingPredefinedDesigns) return;
+            if (GameManager.Instance.CurrentState == GameManager.GameState.Battle
+                || Patch_GameManager.CurrentSubGameState == Patch_GameManager.SubGameState.LoadingPredefinedDesigns)
+                return;
 
             // Melon<TweaksAndFixes>.Logger.Msg($"Overriding mounts for part {part.name}");
 
@@ -527,127 +527,28 @@ namespace TweaksAndFixes
 
                 // Melon<TweaksAndFixes>.Logger.Error($"Checking part {part.Name()}");
 
-                MountOverrideData.ApplyMountOverride(part, part.gameObject.GetChildren()[0], "", true, forced);
+                MountOverrideData.ApplyMountOverride(part, part.model.gameObject, "", true, forced);
 
                 // Melon<TweaksAndFixes>.Logger.Msg($"\n{ModUtils.DumpHierarchy(part.gameObject)}\n\n\n\n");
             }
             else
             {
-                if (part.gameObject.GetChildren().Count > 0 &&
-                    part.gameObject.GetChildren()[0].GetChildren().Count > 0 &&
-                    part.gameObject.GetChildren()[0].GetChildren()[0].GetChildren().Count > 0)
-                {
-                    GameObject shipObj = part.gameObject.GetChildren()[0].GetChildren()[0].GetChildren()[0];
+                var sections = part.model.gameObject.GetChild("Visual").GetChild("Sections").GetChildren();
 
+                if (sections.Count > 0)
+                {
                     // Melon<TweaksAndFixes>.Logger.Error($"Checking ship hull {hull.name}");
 
-                    foreach (GameObject section in shipObj.GetChildren())
+                    foreach (GameObject section in sections)
                     {
-                        MountOverrideData.ApplyMountOverride(part, section, $"{part.GetChildren()[0].name.Replace("(Clone)", "")}/Visual/Sections/", true, forced);
+                        MountOverrideData.ApplyMountOverride(
+                            part, section, $"{part.model.name.Replace("(Clone)", "")}/Visual/Sections/", true, forced
+                        );
                     }
                 }
             }
         }
         
-        public static void ApplyMountOverridesToShip(Ship ship, bool forced = false)
-        {
-            // Melon<TweaksAndFixes>.Logger.Error($"{ship == null} : {GameManager.Instance == null}");
-
-            if (ship == null) return;
-
-            if (GameManager.Instance.CurrentState == GameManager.GameState.Battle || Patch_GameManager.CurrentSubGameState == Patch_GameManager.SubGameState.LoadingPredefinedDesigns) return;
-
-            if (ship.hull == null ||
-                ship.hull.gameObject.GetChildren().Count == 0 ||
-                ship.hull.gameObject.GetChildren()[0].GetChildren().Count == 0 ||
-                ship.hull.gameObject.GetChildren()[0].GetChildren()[0].GetChildren().Count == 0) return;
-
-            // Melon<TweaksAndFixes>.Logger.Error($"Overriding mounts for ship {ship.Name(false, false)}");
-
-            foreach (Part part in ship.parts)
-            {
-                if (part == null) continue;
-
-                if (part.gameObject.GetChildren().Count == 0) continue;
-
-                // Melon<TweaksAndFixes>.Logger.Error($"Checking part {part.Name()}");
-
-                MountOverrideData.ApplyMountOverride(part, part.gameObject.GetChildren()[0], "", true, forced);
-            }
-
-            Part hull = ship.hull;
-
-            // Melon<TweaksAndFixes>.Logger.Error($"Hull: {null != null}");
-
-            if (hull != null &&
-                hull.gameObject.GetChildren().Count > 0 &&
-                hull.gameObject.GetChildren()[0].GetChildren().Count > 0 &&
-                hull.gameObject.GetChildren()[0].GetChildren()[0].GetChildren().Count > 0)
-            {
-                GameObject shipObj = ship.hull.gameObject.GetChildren()[0].GetChildren()[0].GetChildren()[0];
-
-                // Melon<TweaksAndFixes>.Logger.Error($"Checking ship hull {hull.name}");
-
-                foreach (GameObject section in shipObj.GetChildren())
-                {
-                    MountOverrideData.ApplyMountOverride(ship.hull, section, $"{ship.hull.GetChildren()[0].name.Replace("(Clone)", "")}/Visual/Sections/", true, forced);
-                }
-            }
-
-            // Remount parts after updating
-
-            Part placingPart = null;
-
-            if (ship.gameObject.GetChild("PlacingPart", true) != null)
-            {
-                placingPart = ship.gameObject.GetChild("PlacingPart").GetComponent<Part>();
-            }
-
-            foreach (Part part in ship.parts)
-            {
-                if (part == placingPart) continue;
-            
-                if (part.mount != null)
-                {
-                    if (part.mount.transform.position.x < -99000)
-                    {
-                        part.mount = null;
-                    }
-                    else if (part.transform.position != part.mount.transform.position)
-                    {
-                        Vector3 partPos = part.transform.position;
-                        Vector3 mountPos = part.mount.transform.position;
-                        
-                        if (!ModUtils.NearlyEqual(partPos, mountPos))
-                        {
-                            // Melon<TweaksAndFixes>.Logger.Msg($"Incorrect part snap, unparenting part {part.Name()} at {part.transform.position} from mount at {part.mount.transform.position}");
-                            part.mount = null;
-                            continue;
-                        }
-                
-                        // Melon<TweaksAndFixes>.Logger.Msg($"Snapping {part.Name()} at {part.transform.position} to mount at {part.mount.transform.position}");
-                        part.transform.position = part.mount.transform.position;
-                    }
-                }
-                else if (ship.mounts != null)
-                {
-                    foreach (Mount mount in ship.mounts)
-                    {
-                        if (mount == null) continue;
-                        
-                        if (mount.employedPart != null) continue;
-                        
-                        if (ModUtils.NearlyEqual(mount.transform.position, part.transform.position))
-                        {
-                            // Melon<TweaksAndFixes>.Logger.Msg($"Snapping {part.Name()} at {part.transform.position} to mount at {mount.transform.position}");
-                            part.Mount(mount);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
         // Load CSV with comment lines and a default line.
         public static void LoadData()
         {

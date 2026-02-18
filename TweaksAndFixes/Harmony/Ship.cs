@@ -359,7 +359,7 @@ namespace TweaksAndFixes
             mockPart.ship = ship;
             mockPart._ship_k__BackingField = ship;
 
-            var sectionsGo = ModUtils.FindDeepChild(ship.hull.gameObject, "Sections"); // ship.hull.gameObject.GetChildren()[0].GetChildren()[0].GetChild("Sections");
+            var sectionsGo = ship.hull.model.gameObject.GetChild("Visual").GetChild("Sections");
 
             if (sectionsGo == null)
             {

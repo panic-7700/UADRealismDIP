@@ -786,7 +786,7 @@ namespace TweaksAndFixes
                 }
             }
 
-            GameObject part = Util.ResourcesLoad<GameObject>(SelectedPart.gameObject.GetChildren()[0].name.Replace("(Clone)", ""));
+            GameObject part = Util.ResourcesLoad<GameObject>(SelectedPart.model.name.Replace("(Clone)", ""));
 
             print += $"\n  Mounts";
             print += $"\n    CSV   :{ModUtils.GeneratePartMountListCSV(part)}";
@@ -800,7 +800,7 @@ namespace TweaksAndFixes
 
             Part hull = ship.hull;
 
-            string name = hull.gameObject.GetChildren()[0].name.Replace("(Clone)", "");
+            string name = hull.model.name.Replace("(Clone)", "");
 
             print += $"Hull:";
             print += $"\n  Name    : {hull.Name()}";
